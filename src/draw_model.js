@@ -18,7 +18,6 @@ class Drawing {
     }
 
     add(shape,parameters) {
-        // "rect",{ "thick" : 2, "line" : "black", "fill" : "none", "points" : [10,10,20,20] }
         g_commander.update( cmd => {
             let command = {
                 "cmd" : shape,
@@ -32,6 +31,26 @@ class Drawing {
         g_commander.update( cmd => {
             let command = {
                 "command" : action,
+                "pars" : parameters
+            }
+            return command
+        })
+    }
+
+    update(parameters) {
+        g_commander.update( cmd => {
+            let command = {
+                "update" : true,
+                "pars" : parameters
+            }
+            return command
+        })
+    }
+
+    searching(parameters) {
+        g_commander.update( cmd => {
+            let command = {
+                "searching" : true,
                 "pars" : parameters
             }
             return command

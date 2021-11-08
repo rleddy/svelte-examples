@@ -5,33 +5,38 @@
 
     export let height = 460
     export let width = 680
+    export let selected = false
+    export let mouse_to_shape = false
 
     let the_canvas
     let ctxt = false
     let drawit = false
     $: if ( the_canvas ) {
         ctxt = the_canvas.getContext("2d");
-        drawit = new DrawTools(ctxt)
+        drawit = new DrawTools(ctxt,width,height)
     }
 
     g_commander.subscribe((command) => {
+        if ( !drawit ) return
         if ( !ctxt && the_canvas )  {
             ctxt = the_canvas.getContext("2d");
             drawit.setContext(ctxt)
         }
         //
         let pars = command.pars
-        let draw_cmd = command.cmd
-        if ( draw_cmd === undefined ) {
+        if ( command.cmd !== undefined ) {
+            let cmd = command.cmd
+            drawit[cmd](pars)
+        } else if ( command.command !== undefined  ) {
             let cmd = command.command
-            if ( cmd ) {
-                if ( !drawit ) return
-                drawit[cmd](pars)
-            }
-        } else {
-            if ( !drawit ) return
-            drawit[draw_cmd](pars)
+            drawit[cmd](pars)
+        } else if ( command.update !== undefined ) {
+            drawit.update(pars)
+        } else if ( command.searching !== undefined ) {
+            mouse_to_shape = drawit.mouse_in_shape(pars)
         }
+
+        selected = drawit.selected_object()
     })
 
 </script>
