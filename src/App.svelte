@@ -1,11 +1,11 @@
 <script>
 	import Tabs from "svelte-nested-tabs"
-	import CanDraw from "./CanDraw.svelte"
-	import { set_drawing } from "./draw_model"
+	import CanDraw from "svelte-can-draw"
 	import {component_mapper} from "./button_utils"
 
 	export let name;
 
+	let set_drawing = CanDraw.draw_model.set_drawing
 
 	let can_draw_selected = false
 
@@ -87,11 +87,13 @@
 	}
 
 	let funny_toggle = false
+	let sel_object_type = ""
 	function resize_found() {
 		draw_control.searching({ "mouse_loc" : [15,15] })
 		if ( (shape_index !== false) && (shape_index >= 0) ) {
 			draw_control.command("select",{"select" : shape_index})
 			if ( can_draw_selected ) {
+				sel_object_type = can_draw_selected.cmd
 				let count = 0
 				funny_toggle = !funny_toggle
 				let Intrvl = setInterval(() => {
@@ -114,6 +116,16 @@
 		}
 	}
 
+
+	let scaley_toggle = false
+	function scale_drawing() {
+		scaley_toggle = !scaley_toggle
+		if ( scaley_toggle ) {
+			draw_control.command("scale_redraw",{"scale" : [1.3,1.3]})
+		} else {
+			draw_control.command("scale_redraw",{"scale" : [1.0,1.0]})
+		}
+	}
 
 
 	let app_component_map = {
@@ -216,6 +228,7 @@
 	<button on:click={find_shape} >find_shape</button>{shape_index}
 	<button on:click={change_draw_selected} >change_draw_selected</button>
 	<button on:click={resize_found} >resize_found</button>
+	<button on:click={scale_drawing} >scale_drawing</button>
 	
 	<CanDraw bind:selected={can_draw_selected} bind:mouse_to_shape={shape_index} height="460"  width="680" />
 	<div class="tab-container" >

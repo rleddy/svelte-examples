@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "sirv-cli": "^1.0.0",
+    "svelte-can-draw": "^0.1.5",
     "svelte-nested-tabs": "^0.9.3"
   }
 }
