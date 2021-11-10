@@ -127,6 +127,15 @@
 		}
 	}
 
+	let grid_toggle = false
+	function toggle_grid() {
+		if ( grid_toggle ) {
+			draw_control.command("set_grid",{"interval" : 50, "grid_on" : true })			
+		} else {
+			draw_control.command("set_grid",{"interval" : 50, "grid_on" : false })			
+		}
+	}
+
 
 	let app_component_map = {
 		"Tabs" : Tabs,
