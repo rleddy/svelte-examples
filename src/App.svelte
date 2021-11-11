@@ -156,7 +156,7 @@
 				"name" : "tutorial",
 				"content" : "too much",
 				"style" : {
-					"panel" : "background-color:yellow",
+					"panel" : "background-color:white",
 					"button" : {
 						"active" : "color:purple"
 					}
@@ -180,7 +180,13 @@
 			}
 		],
 		"tab_panels" : {
-			"l1_1" : false,
+			"l1_1" : {
+				"component" : "CanDraw",
+				"parameters" : {
+					"height" : "460",
+					"width" : "680"
+				}
+			},
 			"l1_2" : {
 				"component" : "Tabs",
 				"parameters" : {
@@ -226,6 +232,35 @@
 	component_mapper(tab_def,app_component_map)
 
 
+	let tab_top = null
+
+
+	async function load_new_componet(evt) {
+		//
+		try {
+			let moduleJS = await fetch('http://localhost:8080/addable.js')
+			moduleJS = await moduleJS.text()
+			let MyComponent = false
+			let BB =  moduleJS + 
+`
+	MyComponent = MyComponentQ
+`
+			eval(BB)
+		
+			app_component_map["simple"] = MyComponent
+			tab_def.tab_panels.l1_3 =  {
+					"component" : MyComponent,
+					"parameters" : {
+						"my_var" : "Well! Wha'd'ya know!!!"
+					}
+			}
+
+		} catch(e) {
+
+		}
+
+	}
+
 </script>
 
 <main>
@@ -238,8 +273,9 @@
 	<button on:click={change_draw_selected} >change_draw_selected</button>
 	<button on:click={resize_found} >resize_found</button>
 	<button on:click={scale_drawing} >scale_drawing</button>
+	<button on:click={load_new_componet}>load component</button>
 	
-	<CanDraw bind:selected={can_draw_selected} bind:mouse_to_shape={shape_index} height="460"  width="680" />
+	<!-- <CanDraw bind:selected={can_draw_selected} bind:mouse_to_shape={shape_index} height="460"  width="680" /> -->
 	<div class="tab-container" >
 		<Tabs {...tab_def} />
 	</div>
