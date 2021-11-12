@@ -234,6 +234,9 @@
 
 	let tab_top = null
 
+	async function decryptor(txt) {
+		return txt
+	}
 
 	async function load_new_componet(evt) {
 		//
@@ -241,11 +244,13 @@
 			let moduleJS = await fetch('http://localhost:8080/addable.js')
 			moduleJS = await moduleJS.text()
 			let MyComponent = false
-			let BB =  moduleJS + 
+			let ClassDefCode =  moduleJS + 
 `
 	MyComponent = MyComponentQ
 `
-			eval(BB)
+
+			ClassDefCode = decryptor(ClassDefCode)
+			eval(ClassDefCode)
 		
 			app_component_map["simple"] = MyComponent
 			tab_def.tab_panels.l1_3 =  {
